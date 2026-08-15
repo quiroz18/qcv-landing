@@ -315,8 +315,6 @@ footer{border-top:1px solid var(--line);padding:44px 0;}
     <a href="formulario.html" class="brand" style="text-decoration:none;"><img src="assets/logo.png" alt="QCV" /></a>
     <div class="portal-tabs">
       <a href="index.html" class="tab" data-i18n="tab_landing">Landing</a>
-      <a href="https://cv-vault.netlify.app/admin.html" class="tab" data-i18n="tab_panel">Panel</a>
-      <a href="https://cv-vault.netlify.app/solicitudes.html" class="tab" data-i18n="tab_requests">Solicitudes</a>
       <a href="formulario.html" class="tab active" data-i18n="tab_form">Formulario</a>
     </div>
     <div class="navctrls">
@@ -417,7 +415,7 @@ const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_
 const dict = {
   es: {
     nav_home:"Inicio", nav_services:"Servicios", nav_about:"Sobre mí", nav_testimonials:"Testimonios", nav_cta:"Contáctame",
-    tab_landing:"Landing", tab_panel:"Panel", tab_requests:"Solicitudes", tab_form:"Formulario",
+    tab_landing:"Landing", tab_form:"Formulario",
     hero_eyebrow:"¿Buscas trabajo remoto?",
     hero_h1_html:'Tu currículum puede abrir <span class="accent">nuevas puertas</span>',
     hero_lead:"Te ayudo a tener un CV profesional, optimizado para sistemas ATS, que aumente tus posibilidades de ser contactado por reclutadores.",
@@ -466,7 +464,7 @@ const dict = {
   },
   en: {
     nav_home:"Home", nav_services:"Services", nav_about:"About", nav_testimonials:"Testimonials", nav_cta:"Contact me",
-    tab_landing:"Landing", tab_panel:"Panel", tab_requests:"Requests", tab_form:"Form",
+    tab_landing:"Landing", tab_form:"Form",
     hero_eyebrow:"Looking for remote work?",
     hero_h1_html:'Your resume can open <span class="accent">new doors</span>',
     hero_lead:"I help you get a professional, ATS-optimized resume that increases your chances of being contacted by recruiters.",
