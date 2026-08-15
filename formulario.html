@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>QCV · Tu currículum, optimizado</title>
+<title>QCV · Solicitud de CV</title>
 <meta name="description" content="CV profesional optimizado para ATS. Más contactos, más oportunidades." />
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon-512.png">
@@ -195,13 +195,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:14px 2
   border-top:1px solid var(--line);padding-top:16px;
 }
 .svc-price small{font-size:12px;color:var(--ink-dim);font-weight:400;display:block;margin-bottom:2px;}
-.svc-cta{width:100%;margin-top:20px;padding:12px 20px;font-size:13.5px;}
-.unsure-box{
-  display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;
-  margin-top:28px;padding:16px 20px;border:1px dashed var(--line);border-radius:12px;
-  text-align:center;color:var(--ink-dim);font-size:14px;
-}
-.unsure-btn{padding:9px 18px;font-size:13px;}
 .note-box{
   margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px;
 }
@@ -309,12 +302,6 @@ footer{border-top:1px solid var(--line);padding:44px 0;}
 <header>
   <nav>
     <div class="brand"><img src="assets/logo.png" alt="QCV" /></div>
-    <div class="navlinks">
-      <a href="#inicio" data-i18n="nav_home">Inicio</a>
-      <a href="#servicios" data-i18n="nav_services">Servicios</a>
-      <a href="#sobre-mi" data-i18n="nav_about">Sobre mí</a>
-      <a href="#testimonios" data-i18n="nav_testimonials">Testimonios</a>
-    </div>
     <div class="navctrls">
       <div class="pill-toggle" id="langToggle">
         <button data-lang="es">ES</button>
@@ -323,164 +310,62 @@ footer{border-top:1px solid var(--line);padding:44px 0;}
       <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
         <svg id="themeIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
       </button>
-      <button class="cta-btn" onclick="contactWhatsApp()" data-i18n="nav_cta">Contáctame</button>
     </div>
   </nav>
 </header>
 
-<!-- ============ HERO ============ -->
-<section class="hero" id="inicio">
-  <div class="wrap">
-    <div class="hero-grid">
-      <div>
-        <span class="eyebrow" data-i18n="hero_eyebrow">¿Buscas trabajo remoto?</span>
-        <h1 data-i18n-html="hero_h1">Tu currículum puede abrir <span class="accent">nuevas puertas</span></h1>
-        <p class="lead" data-i18n="hero_lead">Te ayudo a tener un CV profesional, optimizado para sistemas ATS, que aumente tus posibilidades de ser contactado por reclutadores.</p>
-        <div class="hero-cta">
-          <button class="btn-primary" onclick="contactWhatsApp()" data-i18n="hero_cta1">Empecemos ahora →</button>
-          <button class="btn-ghost" onclick="document.getElementById('servicios').scrollIntoView()" data-i18n="hero_cta2">Ver servicios</button>
-        </div>
-      </div>
-      <div class="mockup">
-        <div class="mockup-doc">
-          <div class="scanline"></div>
-          <div class="avatarrow">
-            <div class="avatar"></div>
-            <div>
-              <div class="name"></div>
-              <div class="role"></div>
-            </div>
-          </div>
-          <div class="barlabel"></div>
-          <div class="line w90"></div>
-          <div class="line w80"></div>
-          <div class="line w60"></div>
-          <div class="barlabel"></div>
-          <div class="line w90"></div>
-          <div class="line w40"></div>
-        </div>
-        <div class="mockup-phone">
-          <div class="line" style="width:60%;height:6px;"></div>
-          <div class="line" style="width:90%;"></div>
-          <div class="line" style="width:75%;"></div>
-          <div class="line" style="width:85%;"></div>
-          <div class="line" style="width:50%;"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="strip">
-      <div class="strip-inner">
-        <div class="strip-item">
-          <div class="ic"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/></svg></div>
-          <span data-i18n="strip1">CV profesional</span>
-        </div>
-        <div class="strip-item">
-          <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></div>
-          <span data-i18n="strip2">Optimizado para ATS</span>
-        </div>
-        <div class="strip-item">
-          <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 21h18M6 21V10M12 21V4M18 21v-7"/></svg></div>
-          <span data-i18n="strip3">Más visibilidad, más oportunidades</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ SLOGAN BANNER ============ -->
-<section class="banner" style="padding:0;">
-  <div class="wrap" style="padding:64px 24px;">
-    <h2 data-i18n-html="slogan">Tu CV profesional optimizado para ATS.<span class="dim">Más contactos. Más oportunidades.</span></h2>
-  </div>
-</section>
-
-<!-- ============ SERVICIOS ============ -->
-<section id="servicios">
+<!-- ============ FORMULARIO ============ -->
+<section id="formulario" style="padding-top:64px;">
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow" data-i18n="svc_eyebrow">Servicios que ofrezco</span>
-      <h2 data-i18n="svc_title">Elige lo que necesitas</h2>
-      <p data-i18n="svc_sub">Dos formas de mejorar tu currículum, según qué tan lejos quieras llegar.</p>
+      <span class="eyebrow" data-i18n="form_eyebrow">Empecemos</span>
+      <h2 data-i18n="form_title">Cuéntame sobre ti</h2>
+      <p data-i18n="form_sub">Llena este formulario y te contacto por WhatsApp para coordinar el pago y los detalles.</p>
     </div>
 
-    <div class="services-grid">
-      <div class="svc-card">
-        <div class="ic" style="background:var(--surface);border:1px solid var(--line);">
-          <svg viewBox="0 0 24 24" style="stroke:var(--cyan);"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <form class="form-shell" id="cvForm">
+      <div class="f-row">
+        <div class="f-group">
+          <label data-i18n="f_name">Nombre completo <span class="req">*</span></label>
+          <input type="text" id="fullName" required />
         </div>
-        <h3 data-i18n="svc1_title">1. Evaluación de currículum</h3>
-        <ul>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="svc1_b1">Revisión completa de tu currículum actual.</span></li>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="svc1_b2">Te indico qué mejorar y cómo optimizarlo para ATS.</span></li>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="svc1_b3">Te envío una plantilla ATS gratis para que la uses.</span></li>
-        </ul>
-        <div class="svc-price"><small data-i18n="svc_cost">Costo</small>RD$500.00</div>
-        <button class="btn-primary svc-cta" onclick="requestService('eval')" data-i18n="svc1_cta">Quiero este servicio →</button>
-      </div>
-
-      <div class="svc-card">
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.2H22l-6.2 4.5 2.4 7.3L12 16.5 5.8 21l2.4-7.3L2 9.2h7.6z"/></svg></div>
-        <h3 data-i18n="svc2_title">2. Elaboración de currículum ATS</h3>
-        <ul>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="svc2_b1">Creo para ti un currículum profesional, optimizado para ATS.</span></li>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="svc2_b2">Diseño limpio, estructurado y enfocado en destacar tus fortalezas.</span></li>
-          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="svc2_b3">Aumenta tus posibilidades de contacto al aplicar a trabajos.</span></li>
-        </ul>
-        <div class="svc-price"><small data-i18n="svc_cost">Costo</small>RD$1,000.00</div>
-        <button class="btn-primary svc-cta" onclick="requestService('cv')" data-i18n="svc2_cta">Quiero este servicio →</button>
-      </div>
-    </div>
-
-    <div class="unsure-box">
-      <span data-i18n="unsure_text">¿No sabes cuál elegir?</span>
-      <button class="btn-ghost unsure-btn" onclick="contactWhatsApp()" data-i18n="unsure_cta">Contáctame</button>
-    </div>
-
-    <div class="note-box">
-      <div class="note"><b data-i18n="note1_title">Además, te comparto oportunidades laborales</b><span data-i18n="note1_body">Recibirás posiciones recientes para que apliques a trabajos que se ajusten a tu perfil.</span></div>
-      <div class="note"><b data-i18n="note2_title">Importante</b><span data-i18n="note2_body">No aseguro trabajos ni consigo empleos. Lo que ofrezco es ayudarte a tener un currículum mejor orientado y elaborado para aumentar tus posibilidades de que te contacten.</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ SOBRE MÍ ============ -->
-<section id="sobre-mi" style="background:var(--surface);">
-  <div class="wrap">
-    <div class="about-grid">
-      <div>
-        <div class="about-badge"><img src="assets/icon-mark.png" alt="" /></div>
-        <h2 data-i18n="about_title">Sobre mí</h2>
-        <p data-i18n="about_p1">Soy Ricardo Quiroz. Trabajo en atención al cliente y he liderado equipos de soporte durante varios años, así que sé exactamente qué buscan los reclutadores y qué hace que un perfil destaque de verdad.</p>
-        <p data-i18n="about_p2">Fundé QCV para ayudar a otros profesionales de LATAM a presentarse mejor ante los sistemas de selección automatizados (ATS) y ante las personas que finalmente deciden contratar.</p>
-        <div class="about-stats">
-          <div class="stat"><b>+3</b><span data-i18n="about_stat1">años liderando equipos</span></div>
-          <div class="stat"><b>ATS</b><span data-i18n="about_stat2">optimización real</span></div>
+        <div class="f-group">
+          <label data-i18n="f_email">Correo electrónico <span class="req">*</span></label>
+          <input type="email" id="email" required />
         </div>
       </div>
-      <div class="mockup">
-        <div class="mockup-doc" style="max-width:420px;">
-          <div class="avatarrow">
-            <div class="avatar"></div>
-            <div><div class="name"></div><div class="role"></div></div>
-          </div>
-          <div class="barlabel"></div><div class="line w80"></div><div class="line w60"></div>
-          <div class="barlabel"></div><div class="line w90"></div><div class="line w40"></div>
+      <div class="f-row">
+        <div class="f-group full">
+          <label data-i18n="f_phone">Número de contacto <span class="req">*</span></label>
+          <input type="tel" id="phone" required />
         </div>
       </div>
-    </div>
-  </div>
-</section>
 
-<!-- ============ TESTIMONIOS ============ -->
-<section id="testimonios">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow" data-i18n="tt_eyebrow">Testimonios</span>
-      <h2 data-i18n="tt_title">Lo que dicen mis clientes</h2>
-    </div>
-    <div class="tt-avg" id="ttAvg"></div>
-    <div class="tt-grid" id="ttGrid"></div>
+      <div class="f-group full">
+        <label data-i18n="f_exp_title">Experiencia laboral <span class="req">*</span></label>
+        <p class="hint" data-i18n="f_exp_hint">Si trabajaste en un call center, pon el nombre de la campaña, no el de la empresa. Si no recuerdas el año exacto, pon uno estimado.</p>
+        <div id="expList"></div>
+        <button type="button" class="add-exp" id="addExpBtn" data-i18n="f_exp_add">+ Agregar otra experiencia</button>
+      </div>
+
+      <div class="f-row">
+        <div class="f-group">
+          <label data-i18n="f_edu">Educación <span class="req">*</span></label>
+          <input type="text" id="education" placeholder="N/A" required />
+          <p class="hint" data-i18n="f_edu_hint">Si no tienes, escribe N/A.</p>
+        </div>
+        <div class="f-group">
+          <label data-i18n="f_cert">Certificaciones <span class="req">*</span></label>
+          <input type="text" id="certifications" placeholder="N/A" required />
+          <p class="hint" data-i18n="f_cert_hint">Si no tienes, escribe N/A.</p>
+        </div>
+      </div>
+
+      <div class="submit-row">
+        <button type="submit" class="btn-primary" id="submitBtn" data-i18n="f_submit">Enviar información</button>
+        <span class="form-msg" id="formMsg"></span>
+      </div>
+    </form>
   </div>
 </section>
 
@@ -532,9 +417,6 @@ const dict = {
     svc2_b2:"Diseño limpio, estructurado y enfocado en destacar tus fortalezas.",
     svc2_b3:"Aumenta tus posibilidades de contacto al aplicar a trabajos.",
     svc_cost:"Costo",
-    svc1_cta:"Quiero este servicio →", svc2_cta:"Quiero este servicio →",
-    unsure_text:"¿No sabes cuál elegir? Te ayudo a decidir.",
-    unsure_cta:"Escríbeme",
     note1_title:"Además, te comparto oportunidades laborales",
     note1_body:"Recibirás posiciones recientes para que apliques a trabajos que se ajusten a tu perfil.",
     note2_title:"Importante",
@@ -583,13 +465,10 @@ const dict = {
     svc2_b2:"Clean, structured design focused on highlighting your strengths.",
     svc2_b3:"Increases your chances of getting contacted when you apply.",
     svc_cost:"Price",
-    svc1_cta:"I want this service →", svc2_cta:"I want this service →",
-    unsure_text:"Not sure which to choose? I'll help you decide.",
-    unsure_cta:"Message me",
     note1_title:"I also share job opportunities",
     note1_body:"You'll receive recent openings so you can apply to jobs that fit your profile.",
     note2_title:"Important",
-    note2_body:"I don't guarantee jobs or secure employment for you. What I offer is a well-crafted, better-oriented resume that increases your chances of getting contacted.",
+    note2_body:"I don't guarantee jobs or find employment for you. What I offer is helping you have a better-oriented, well-built resume to increase your chances of getting contacted.",
     about_title:"About me",
     about_p1:"I'm Ricardo Quiroz. I work in customer support and have led support teams for several years, so I know exactly what recruiters look for and what makes a profile truly stand out.",
     about_p2:"I founded QCV to help other LATAM professionals present themselves better to automated screening systems (ATS) and to the people who ultimately make hiring decisions.",
@@ -637,7 +516,7 @@ function applyLang(lang){
     b.classList.toggle('active', b.dataset.lang === lang);
   });
 
-  renderTestimonials();
+  refreshExpLabels();
 }
 
 function chooseLang(lang){
@@ -671,56 +550,98 @@ document.getElementById('themeToggle').addEventListener('click', ()=>{
 });
 applyTheme(localStorage.getItem('qcv_theme') || 'dark');
 
-// ---------- Testimonials ----------
-const STARS = "★★★★★";
-async function renderTestimonials(){
-  const grid = document.getElementById('ttGrid');
-  const avg = document.getElementById('ttAvg');
-  const { data, error } = await supabaseClient
-    .from('testimonials')
-    .select('client_name, rating, comment, created_at')
-    .order('created_at', { ascending:false })
-    .limit(9);
+// ---------- Experience rows ----------
+let expCount = 0;
+function addExpRow(){
+  expCount++;
+  const id = expCount;
+  const wrap = document.createElement('div');
+  wrap.className = 'exp-block';
+  wrap.dataset.id = id;
+  wrap.innerHTML = `
+    <span class="exp-title">#${id}</span>
+    ${id>1 ? `<button type="button" class="exp-remove" data-remove="${id}">✕ <span class="rm-label"></span></button>` : ''}
+    <div class="f-row">
+      <div class="f-group full">
+        <label class="lbl-place">Lugar / Campaña</label>
+        <input type="text" class="exp-place" placeholder="Ej. Ventas AT&T (campaña)" />
+      </div>
+    </div>
+    <div class="f-row">
+      <div class="f-group">
+        <label class="lbl-start">Año de entrada</label>
+        <input type="text" class="exp-start" placeholder="2021" />
+      </div>
+      <div class="f-group">
+        <label class="lbl-end">Año de salida (o 'actual')</label>
+        <input type="text" class="exp-end" placeholder="2023" />
+      </div>
+    </div>
+  `;
+  document.getElementById('expList').appendChild(wrap);
+  const rm = wrap.querySelector('[data-remove]');
+  if(rm) rm.addEventListener('click', ()=> wrap.remove());
+  refreshExpLabels();
+}
+function refreshExpLabels(){
+  const l = dict[currentLang || 'es'];
+  document.querySelectorAll('.lbl-place').forEach(el=> el.textContent = l.f_place);
+  document.querySelectorAll('.exp-place').forEach(el=> el.placeholder = l.f_place_ph);
+  document.querySelectorAll('.lbl-start').forEach(el=> el.textContent = l.f_start);
+  document.querySelectorAll('.lbl-end').forEach(el=> el.textContent = l.f_end);
+  document.querySelectorAll('.rm-label').forEach(el=> el.textContent = l.f_remove);
+}
+document.getElementById('addExpBtn').addEventListener('click', addExpRow);
+addExpRow(); // start with one row
 
-  if(error || !data || data.length === 0){
-    grid.innerHTML = `<div class="tt-empty">${dict[currentLang||'es'].tt_empty}</div>`;
-    avg.textContent = "";
+// ---------- Submit ----------
+document.getElementById('cvForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const l = dict[currentLang || 'es'];
+  const msg = document.getElementById('formMsg');
+  const btn = document.getElementById('submitBtn');
+
+  const experiences = Array.from(document.querySelectorAll('.exp-block')).map(b=>({
+    place: b.querySelector('.exp-place').value.trim(),
+    start_year: b.querySelector('.exp-start').value.trim(),
+    end_year: b.querySelector('.exp-end').value.trim(),
+  })).filter(x=>x.place || x.start_year || x.end_year);
+
+  if(experiences.length === 0){
+    msg.textContent = l.form_err_exp; msg.className = 'form-msg err';
     return;
   }
-  const avgVal = (data.reduce((s,t)=>s+t.rating,0)/data.length).toFixed(1);
-  avg.textContent = `${STARS.slice(0,Math.round(avgVal))} ${avgVal} (${data.length})`;
-  grid.innerHTML = data.map(t=>`
-    <div class="tt-card">
-      <div class="tt-stars">${STARS.slice(0,t.rating)}${"☆".repeat(5-t.rating)}</div>
-      ${t.comment ? `<div class="tt-comment">${escapeHtml(t.comment)}</div>` : ''}
-      <div class="tt-name">${escapeHtml(t.client_name||'Cliente')}</div>
-    </div>
-  `).join('');
-}
-function escapeHtml(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
-// ---------- Contact CTA ----------
-function contactWhatsApp(){
-  const msg = currentLang === 'en'
-    ? "Hi! I'm interested in the QCV resume service."
-    : "¡Hola! Me interesa el servicio de currículum de QCV.";
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
-}
+  btn.disabled = true;
+  msg.textContent = l.form_sending; msg.className = 'form-msg';
 
-function requestService(service){
-  const messages = {
-    eval: {
-      es: "¡Hola! Quiero el servicio de Evaluación de currículum (RD$500).",
-      en: "Hi! I'd like the Resume Evaluation service (RD$500).",
-    },
-    cv: {
-      es: "¡Hola! Quiero el servicio de Elaboración de currículum ATS (RD$1,000).",
-      en: "Hi! I'd like the ATS Resume Creation service (RD$1,000).",
-    },
+  const payload = {
+    full_name: document.getElementById('fullName').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    phone: document.getElementById('phone').value.trim(),
+    experience: experiences,
+    education: document.getElementById('education').value.trim(),
+    certifications: document.getElementById('certifications').value.trim(),
+    language: currentLang || 'es',
   };
-  const msg = messages[service][currentLang === 'en' ? 'en' : 'es'];
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
-}
+
+  try{
+    const { error } = await supabaseClient.from('cv_requests').insert(payload);
+    if(error) throw error;
+    msg.textContent = l.form_ok; msg.className = 'form-msg ok';
+    document.getElementById('cvForm').reset();
+    document.getElementById('expList').innerHTML = '';
+    expCount = 0; addExpRow();
+    setTimeout(()=>{
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hola! Acabo de llenar el formulario en QCV para mi currículum.')}`, '_blank');
+    }, 900);
+  }catch(err){
+    console.error(err);
+    msg.textContent = l.form_err; msg.className = 'form-msg err';
+  }finally{
+    btn.disabled = false;
+  }
+});
 </script>
 </body>
 </html>

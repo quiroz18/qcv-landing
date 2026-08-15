@@ -4,6 +4,10 @@ Sitio bilingüe (ES/EN) para el servicio de elaboración de CVs. Incluye
 selector de idioma que se recuerda, toggle de modo claro/oscuro, y el
 formulario de solicitud que guarda cada envío en Supabase.
 
+## Estructura del sitio
+- `index.html` — la landing pública: servicios, sobre mí, testimonios, y botones de "Contáctame" que abren WhatsApp directo. **No tiene formulario** — así nadie te manda información sin haber confirmado que quiere el servicio.
+- `formulario.html` — página privada, sin link visible desde la landing. Se la mandas tú al cliente por WhatsApp una vez confirma que quiere avanzar. Ahí llena sus datos (nombre, experiencia, educación, certificaciones) y ese envío sí va a la tabla `cv_requests` en Supabase.
+
 ## Qué incluye
 - `index.html` — todo el sitio (una sola página).
 - `schema.sql` — tabla `cv_requests` (los formularios que te llegan) y
