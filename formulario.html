@@ -427,8 +427,8 @@ const dict = {
     about_stat1:"años liderando equipos", about_stat2:"optimización real",
     tt_eyebrow:"Testimonios", tt_title:"Lo que dicen mis clientes",
     tt_empty:"Aún no hay testimonios — sé el primero.",
-    form_eyebrow:"Empecemos", form_title:"Cuéntame sobre ti",
-    form_sub:"Llena este formulario y te contacto por WhatsApp para coordinar el pago y los detalles.",
+    form_eyebrow:"Último paso", form_title:"Completa tu información",
+    form_sub:"Llena estos datos para que pueda elaborar tu currículum. Revisa cada campo antes de enviarlo.",
     f_name:"Nombre completo", f_email:"Correo electrónico", f_phone:"Número de contacto",
     f_exp_title:"Experiencia laboral",
     f_exp_hint:"Si trabajaste en un call center, pon el nombre de la campaña, no el de la empresa. Si no recuerdas el año exacto, pon uno estimado.",
@@ -440,7 +440,7 @@ const dict = {
     f_start:"Año de entrada", f_end:"Año de salida (o 'actual')",
     f_remove:"Eliminar",
     form_sending:"Enviando...",
-    form_ok:"¡Listo! Te contactaré pronto por WhatsApp.",
+    form_ok:"¡Recibido! Ya tengo tu información para empezar tu CV.",
     form_err:"No se pudo enviar. Intenta de nuevo.",
     form_err_exp:"Agrega al menos una experiencia laboral.",
     foot_wa:"Escríbeme por WhatsApp",
@@ -475,8 +475,8 @@ const dict = {
     about_stat1:"years leading teams", about_stat2:"real optimization",
     tt_eyebrow:"Testimonials", tt_title:"What my clients say",
     tt_empty:"No testimonials yet — be the first.",
-    form_eyebrow:"Let's start", form_title:"Tell me about yourself",
-    form_sub:"Fill out this form and I'll reach out on WhatsApp to arrange payment and details.",
+    form_eyebrow:"Last step", form_title:"Complete your information",
+    form_sub:"Fill in these details so I can build your resume. Please double-check each field before submitting.",
     f_name:"Full name", f_email:"Email address", f_phone:"Contact number",
     f_exp_title:"Work experience",
     f_exp_hint:"If you worked at a call center, put the campaign name, not the company name. If you don't remember the exact year, put an estimate.",
@@ -488,7 +488,7 @@ const dict = {
     f_start:"Start year", f_end:"End year (or 'current')",
     f_remove:"Remove",
     form_sending:"Sending...",
-    form_ok:"Done! I'll reach out soon on WhatsApp.",
+    form_ok:"Received! I now have your information to start your resume.",
     form_err:"Couldn't send. Please try again.",
     form_err_exp:"Add at least one work experience.",
     foot_wa:"Message me on WhatsApp",
@@ -632,9 +632,6 @@ document.getElementById('cvForm').addEventListener('submit', async (e)=>{
     document.getElementById('cvForm').reset();
     document.getElementById('expList').innerHTML = '';
     expCount = 0; addExpRow();
-    setTimeout(()=>{
-      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hola! Acabo de llenar el formulario en QCV para mi currículum.')}`, '_blank');
-    }, 900);
   }catch(err){
     console.error(err);
     msg.textContent = l.form_err; msg.className = 'form-msg err';
