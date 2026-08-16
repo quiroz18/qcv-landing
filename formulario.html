@@ -453,6 +453,7 @@ const dict = {
     f_cert:"Certificaciones", f_cert_hint:"Si no tienes, escribe N/A.",
     f_submit:"Enviar información",
     f_place:"Lugar / Campaña", f_place_ph:"Ej. Ventas AT&T (campaña)",
+    f_position:"Posición / Puesto", f_position_ph:"Ej. Representante de servicio al cliente",
     f_start:"Año de entrada", f_end:"Año de salida (o 'actual')",
     f_remove:"Eliminar",
     form_sending:"Enviando...",
@@ -502,6 +503,7 @@ const dict = {
     f_cert:"Certifications", f_cert_hint:"If you don't have any, write N/A.",
     f_submit:"Submit information",
     f_place:"Place / Campaign", f_place_ph:"E.g. AT&T Sales (campaign)",
+    f_position:"Position / Role", f_position_ph:"E.g. Customer Service Representative",
     f_start:"Start year", f_end:"End year (or 'current')",
     f_remove:"Remove",
     form_sending:"Sending...",
@@ -585,6 +587,12 @@ function addExpRow(){
       </div>
     </div>
     <div class="f-row">
+      <div class="f-group full">
+        <label class="lbl-position">Posición / Puesto</label>
+        <input type="text" class="exp-position" placeholder="Ej. Representante de servicio al cliente" />
+      </div>
+    </div>
+    <div class="f-row">
       <div class="f-group">
         <label class="lbl-start">Año de entrada</label>
         <input type="text" class="exp-start" placeholder="2021" />
@@ -604,6 +612,8 @@ function refreshExpLabels(){
   const l = dict[currentLang || 'es'];
   document.querySelectorAll('.lbl-place').forEach(el=> el.textContent = l.f_place);
   document.querySelectorAll('.exp-place').forEach(el=> el.placeholder = l.f_place_ph);
+  document.querySelectorAll('.lbl-position').forEach(el=> el.textContent = l.f_position);
+  document.querySelectorAll('.exp-position').forEach(el=> el.placeholder = l.f_position_ph);
   document.querySelectorAll('.lbl-start').forEach(el=> el.textContent = l.f_start);
   document.querySelectorAll('.lbl-end').forEach(el=> el.textContent = l.f_end);
   document.querySelectorAll('.rm-label').forEach(el=> el.textContent = l.f_remove);
@@ -620,9 +630,10 @@ document.getElementById('cvForm').addEventListener('submit', async (e)=>{
 
   const experiences = Array.from(document.querySelectorAll('.exp-block')).map(b=>({
     place: b.querySelector('.exp-place').value.trim(),
+    position: b.querySelector('.exp-position').value.trim(),
     start_year: b.querySelector('.exp-start').value.trim(),
     end_year: b.querySelector('.exp-end').value.trim(),
-  })).filter(x=>x.place || x.start_year || x.end_year);
+  })).filter(x=>x.place || x.position || x.start_year || x.end_year);
 
   if(experiences.length === 0){
     msg.textContent = l.form_err_exp; msg.className = 'form-msg err';
