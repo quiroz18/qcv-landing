@@ -358,7 +358,7 @@ footer{border-top:1px solid var(--line);padding:44px 0;}
 
       <div class="f-group full">
         <label data-i18n="f_exp_title">Experiencia laboral <span class="req">*</span></label>
-        <p class="hint" data-i18n="f_exp_hint">Si trabajaste en un call center, pon el nombre de la campaña, no el de la empresa. Si no recuerdas el año exacto, pon uno estimado.</p>
+        <p class="hint" data-i18n="f_exp_hint">Si trabajaste en un call center, pon el nombre de la campaña, no el de la empresa. Si no recuerdas el mes o año exacto, pon uno aproximado.</p>
         <div id="expList"></div>
         <button type="button" class="add-exp" id="addExpBtn" data-i18n="f_exp_add">+ Agregar otra experiencia</button>
       </div>
@@ -447,14 +447,15 @@ const dict = {
     form_sub:"Llena estos datos para que pueda elaborar tu currículum. Revisa cada campo antes de enviarlo.",
     f_name:"Nombre completo", f_email:"Correo electrónico", f_phone:"Número de contacto",
     f_exp_title:"Experiencia laboral",
-    f_exp_hint:"Si trabajaste en un call center, pon el nombre de la campaña, no el de la empresa. Si no recuerdas el año exacto, pon uno estimado.",
+    f_exp_hint:"Si trabajaste en un call center, pon el nombre de la campaña, no el de la empresa. Si no recuerdas el mes o año exacto, pon uno aproximado.",
     f_exp_add:"+ Agregar otra experiencia",
     f_edu:"Educación", f_edu_hint:"Si no tienes, escribe N/A.",
     f_cert:"Certificaciones", f_cert_hint:"Si no tienes, escribe N/A.",
     f_submit:"Enviar información",
     f_place:"Lugar / Campaña", f_place_ph:"Ej. Ventas AT&T (campaña)",
     f_position:"Posición / Puesto", f_position_ph:"Ej. Representante de servicio al cliente",
-    f_start:"Año de entrada", f_end:"Año de salida (o 'actual')",
+    f_start:"Mes y año de entrada", f_start_ph:"Ej. Marzo 2021",
+    f_end:"Mes y año de salida (o 'actual')", f_end_ph:"Ej. Agosto 2023",
     f_remove:"Eliminar",
     form_sending:"Enviando...",
     form_ok:"¡Recibido! Ya tengo tu información para empezar tu CV.",
@@ -497,14 +498,15 @@ const dict = {
     form_sub:"Fill in these details so I can build your resume. Please double-check each field before submitting.",
     f_name:"Full name", f_email:"Email address", f_phone:"Contact number",
     f_exp_title:"Work experience",
-    f_exp_hint:"If you worked at a call center, put the campaign name, not the company name. If you don't remember the exact year, put an estimate.",
+    f_exp_hint:"If you worked at a call center, put the campaign name, not the company name. If you don't remember the exact month or year, put an approximate one.",
     f_exp_add:"+ Add another experience",
     f_edu:"Education", f_edu_hint:"If you don't have any, write N/A.",
     f_cert:"Certifications", f_cert_hint:"If you don't have any, write N/A.",
     f_submit:"Submit information",
     f_place:"Place / Campaign", f_place_ph:"E.g. AT&T Sales (campaign)",
     f_position:"Position / Role", f_position_ph:"E.g. Customer Service Representative",
-    f_start:"Start year", f_end:"End year (or 'current')",
+    f_start:"Start month and year", f_start_ph:"E.g. March 2021",
+    f_end:"End month and year (or 'current')", f_end_ph:"E.g. August 2023",
     f_remove:"Remove",
     form_sending:"Sending...",
     form_ok:"Received! I now have your information to start your resume.",
@@ -595,11 +597,11 @@ function addExpRow(){
     <div class="f-row">
       <div class="f-group">
         <label class="lbl-start">Año de entrada</label>
-        <input type="text" class="exp-start" placeholder="2021" />
+        <input type="text" class="exp-start" placeholder="Ej. Marzo 2021" />
       </div>
       <div class="f-group">
         <label class="lbl-end">Año de salida (o 'actual')</label>
-        <input type="text" class="exp-end" placeholder="2023" />
+        <input type="text" class="exp-end" placeholder="Ej. Agosto 2023" />
       </div>
     </div>
   `;
@@ -615,7 +617,9 @@ function refreshExpLabels(){
   document.querySelectorAll('.lbl-position').forEach(el=> el.textContent = l.f_position);
   document.querySelectorAll('.exp-position').forEach(el=> el.placeholder = l.f_position_ph);
   document.querySelectorAll('.lbl-start').forEach(el=> el.textContent = l.f_start);
+  document.querySelectorAll('.exp-start').forEach(el=> el.placeholder = l.f_start_ph);
   document.querySelectorAll('.lbl-end').forEach(el=> el.textContent = l.f_end);
+  document.querySelectorAll('.exp-end').forEach(el=> el.placeholder = l.f_end_ph);
   document.querySelectorAll('.rm-label').forEach(el=> el.textContent = l.f_remove);
 }
 document.getElementById('addExpBtn').addEventListener('click', addExpRow);
