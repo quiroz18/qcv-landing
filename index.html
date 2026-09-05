@@ -189,6 +189,13 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:14px 2
 
 /* ---------- Services ---------- */
 .services-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+.ats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.ats-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;}
+.ats-card .ic{width:44px;height:44px;border-radius:12px;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.ats-card .ic svg{width:20px;height:20px;stroke:var(--cyan);fill:none;stroke-width:2;}
+.ats-card h3{font-size:15.5px;margin-bottom:8px;}
+.ats-card p{font-size:13.5px;color:var(--ink-dim);line-height:1.6;}
+@media (max-width:760px){.ats-grid{grid-template-columns:1fr;}}
 .svc-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:30px;box-shadow:var(--shadow);}
 .svc-card .ic{
   width:52px;height:52px;border-radius:14px;background:var(--grad);display:flex;align-items:center;
@@ -432,6 +439,35 @@ footer{border-top:1px solid var(--line);padding:44px 0;}
   </div>
 </section>
 
+<!-- ============ QUÉ ES UN ATS ============ -->
+<section id="que-es-ats" style="background:var(--surface);">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-i18n="ats_eyebrow">Antes de empezar</span>
+      <h2 data-i18n="ats_title">¿Qué es un ATS?</h2>
+      <p data-i18n-html="ats_intro">ATS son las siglas de <i>Applicant Tracking System</i> (Sistema de Seguimiento de Candidatos) — el software que usan la mayoría de las empresas para recibir, organizar y filtrar currículums antes de que lleguen a un reclutador humano.</p>
+    </div>
+
+    <div class="ats-grid">
+      <div class="ats-card">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <h3 data-i18n="ats1_title">Filtra automáticamente</h3>
+        <p data-i18n="ats1_body">Muchas empresas reciben cientos de solicitudes por vacante. El ATS descarta currículums que no cumplen el formato esperado o no contienen las palabras clave del puesto — antes de que una persona los vea.</p>
+      </div>
+      <div class="ats-card">
+        <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+        <h3 data-i18n="ats2_title">El formato importa</h3>
+        <p data-i18n="ats2_body">Tablas, columnas, imágenes o diseños muy creativos pueden hacer que el sistema lea mal tu información, o la descarte por completo, aunque tu experiencia sea perfecta para el puesto.</p>
+      </div>
+      <div class="ats-card">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+        <h3 data-i18n="ats3_title">Por eso importa optimizarlo</h3>
+        <p data-i18n="ats3_body">Un CV bien estructurado, con las palabras clave correctas y sin adornos que confundan al sistema, aumenta tus posibilidades reales de pasar ese primer filtro y llegar a una entrevista.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ SERVICIOS ============ -->
 <section id="servicios">
   <div class="wrap">
@@ -567,6 +603,14 @@ const dict = {
     hero_cta1:"Empecemos ahora →", hero_cta2:"Ver servicios",
     strip1:"CV profesional", strip2:"Optimizado para ATS", strip3:"Más visibilidad, más oportunidades",
     slogan_html:'Tu CV profesional optimizado para ATS.<span class="dim">Más contactos. Más oportunidades.</span>',
+    ats_eyebrow:"Antes de empezar", ats_title:"¿Qué es un ATS?",
+    ats_intro_html:"ATS son las siglas de <i>Applicant Tracking System</i> (Sistema de Seguimiento de Candidatos) — el software que usan la mayoría de las empresas para recibir, organizar y filtrar currículums antes de que lleguen a un reclutador humano.",
+    ats1_title:"Filtra automáticamente",
+    ats1_body:"Muchas empresas reciben cientos de solicitudes por vacante. El ATS descarta currículums que no cumplen el formato esperado o no contienen las palabras clave del puesto — antes de que una persona los vea.",
+    ats2_title:"El formato importa",
+    ats2_body:"Tablas, columnas, imágenes o diseños muy creativos pueden hacer que el sistema lea mal tu información, o la descarte por completo, aunque tu experiencia sea perfecta para el puesto.",
+    ats3_title:"Por eso importa optimizarlo",
+    ats3_body:"Un CV bien estructurado, con las palabras clave correctas y sin adornos que confundan al sistema, aumenta tus posibilidades reales de pasar ese primer filtro y llegar a una entrevista.",
     svc_eyebrow:"Servicios que ofrezco", svc_title:"Elige lo que necesitas",
     svc_sub:"Dos formas de mejorar tu currículum, según qué tan lejos quieras llegar.",
     svc1_title:"1. Evaluación de currículum",
@@ -619,6 +663,14 @@ const dict = {
     hero_cta1:"Let's start now →", hero_cta2:"See services",
     strip1:"Professional resume", strip2:"ATS optimized", strip3:"More visibility, more opportunities",
     slogan_html:'Your professional, ATS-optimized resume.<span class="dim">More contacts. More opportunities.</span>',
+    ats_eyebrow:"Before we start", ats_title:"What is an ATS?",
+    ats_intro_html:"ATS stands for <i>Applicant Tracking System</i> — the software most companies use to receive, organize, and filter resumes before they ever reach a human recruiter.",
+    ats1_title:"It filters automatically",
+    ats1_body:"Many companies receive hundreds of applications per opening. The ATS discards resumes that don't match the expected format or don't contain the job's keywords — before a person ever sees them.",
+    ats2_title:"Format matters",
+    ats2_body:"Tables, columns, images, or overly creative designs can make the system misread your information, or discard it entirely, even if your experience is a perfect fit for the role.",
+    ats3_title:"That's why optimizing it matters",
+    ats3_body:"A well-structured resume, with the right keywords and no clutter that confuses the system, genuinely increases your chances of passing that first filter and landing an interview.",
     svc_eyebrow:"Services I offer", svc_title:"Choose what you need",
     svc_sub:"Two ways to improve your resume, depending on how far you want to go.",
     svc1_title:"1. Resume evaluation",
