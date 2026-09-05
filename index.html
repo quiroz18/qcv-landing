@@ -233,13 +233,41 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:14px 2
 
 /* ---------- Testimonials ---------- */
 .tt-avg{text-align:center;margin-bottom:30px;font-family:'IBM Plex Mono',monospace;color:var(--cyan);font-size:14px;}
-.tt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-.tt-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;}
-.tt-stars{color:#F5B942;font-size:14px;margin-bottom:8px;letter-spacing:1px;}
-.tt-comment{font-size:13.5px;color:var(--ink-dim);line-height:1.55;margin-bottom:14px;}
-.tt-name{font-size:12.5px;font-weight:600;}
-.tt-empty{grid-column:1/-1;text-align:center;color:var(--ink-dim);font-size:14px;padding:30px;font-family:'IBM Plex Mono',monospace;}
-@media (max-width:820px){.tt-grid{grid-template-columns:1fr;}}
+.tt-carousel{display:flex;align-items:center;gap:16px;max-width:680px;margin:0 auto;}
+.tt-slide-wrap{flex:1;overflow:hidden;}
+.tt-track{display:flex;transition:transform .45s cubic-bezier(.65,0,.35,1);}
+.tt-slide{flex:0 0 100%;box-sizing:border-box;padding:0 4px;}
+.tt-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:36px 40px;text-align:center;min-height:200px;display:flex;flex-direction:column;justify-content:center;}
+.tt-stars{color:#F5B942;font-size:20px;letter-spacing:2px;margin-bottom:18px;}
+.tt-comment{font-size:16px;color:var(--ink);line-height:1.65;margin-bottom:20px;font-family:'Space Grotesk',sans-serif;font-weight:500;}
+.tt-name{font-size:13px;color:var(--ink-dim);font-family:'IBM Plex Mono',monospace;}
+.tt-arrow{
+  flex-shrink:0;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface);
+  color:var(--ink);font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .15s ease;
+}
+.tt-arrow:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-1px);}
+.tt-dots{display:flex;justify-content:center;gap:8px;margin-top:22px;}
+.tt-dot{width:8px;height:8px;border-radius:50%;background:var(--line);border:none;cursor:pointer;padding:0;transition:all .2s ease;}
+.tt-dot.active{background:var(--grad);width:22px;border-radius:5px;}
+.tt-seeall{
+  display:block;margin:22px auto 0;background:none;border:none;color:var(--cyan);
+  font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;cursor:pointer;
+  padding:8px 14px;border-radius:8px;transition:all .15s ease;
+}
+.tt-seeall:hover{background:var(--surface);}
+.tt-all-list{max-width:680px;margin:20px auto 0;display:flex;flex-direction:column;gap:12px;}
+.tt-all-item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px;}
+.tt-all-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:10px;}
+.tt-all-stars{color:#F5B942;font-size:14px;letter-spacing:1px;}
+.tt-all-name{font-size:12.5px;font-weight:600;color:var(--ink-dim);white-space:nowrap;}
+.tt-all-comment{font-size:14px;color:var(--ink-dim);line-height:1.6;}
+.tt-empty{text-align:center;color:var(--ink-dim);font-size:14px;padding:30px;font-family:'IBM Plex Mono',monospace;}
+@media (max-width:600px){
+  .tt-carousel{gap:8px;}
+  .tt-card{padding:28px 22px;}
+  .tt-comment{font-size:14.5px;}
+}
 
 /* ---------- Form ---------- */
 .form-shell{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:40px;box-shadow:var(--shadow);}
@@ -489,7 +517,16 @@ footer{border-top:1px solid var(--line);padding:44px 0;}
       <h2 data-i18n="tt_title">Lo que dicen mis clientes</h2>
     </div>
     <div class="tt-avg" id="ttAvg"></div>
-    <div class="tt-grid" id="ttGrid"></div>
+    <div class="tt-carousel" id="ttCarousel">
+      <button type="button" class="tt-arrow tt-arrow-prev" id="ttPrev" aria-label="Anterior">‹</button>
+      <div class="tt-slide-wrap">
+        <div class="tt-track" id="ttTrack"></div>
+      </div>
+      <button type="button" class="tt-arrow tt-arrow-next" id="ttNext" aria-label="Siguiente">›</button>
+    </div>
+    <div class="tt-dots" id="ttDots"></div>
+    <button type="button" class="tt-seeall" id="ttSeeAllBtn" style="display:none;">Ver todas las reseñas →</button>
+    <div class="tt-all-list" id="ttAllList" style="display:none;"></div>
   </div>
 </section>
 
@@ -553,6 +590,7 @@ const dict = {
     about_p2:"Fundé QCV para ayudar a otros profesionales de LATAM a presentarse mejor ante los sistemas de selección automatizados (ATS) y ante las personas que finalmente deciden contratar.",
     about_stat1:"años liderando equipos", about_stat2:"optimización real",
     tt_eyebrow:"Testimonios", tt_title:"Lo que dicen mis clientes",
+    tt_seeall:"Ver todas las reseñas", tt_showless:"Mostrar menos",
     tt_empty:"Aún no hay testimonios — sé el primero.",
     form_eyebrow:"Empecemos", form_title:"Cuéntame sobre ti",
     form_sub:"Llena este formulario y te contacto por WhatsApp para coordinar el pago y los detalles.",
@@ -604,6 +642,7 @@ const dict = {
     about_p2:"I founded QCV to help other LATAM professionals present themselves better to automated screening systems (ATS) and to the people who ultimately make hiring decisions.",
     about_stat1:"years leading teams", about_stat2:"real optimization",
     tt_eyebrow:"Testimonials", tt_title:"What my clients say",
+    tt_seeall:"See all reviews", tt_showless:"Show less",
     tt_empty:"No testimonials yet — be the first.",
     form_eyebrow:"Let's start", form_title:"Tell me about yourself",
     form_sub:"Fill out this form and I'll reach out on WhatsApp to arrange payment and details.",
@@ -682,8 +721,13 @@ applyTheme(localStorage.getItem('qcv_theme') || 'dark');
 
 // ---------- Testimonials ----------
 const STARS = "★★★★★";
+let ttData = [];
+let ttIndex = 0;
+let ttAutoplayTimer = null;
+
 async function renderTestimonials(){
-  const grid = document.getElementById('ttGrid');
+  const track = document.getElementById('ttTrack');
+  const dots = document.getElementById('ttDots');
   const avg = document.getElementById('ttAvg');
   const { data, error } = await supabaseClient
     .from('testimonials')
@@ -692,20 +736,95 @@ async function renderTestimonials(){
     .limit(9);
 
   if(error || !data || data.length === 0){
-    grid.innerHTML = `<div class="tt-empty">${dict[currentLang||'es'].tt_empty}</div>`;
+    track.innerHTML = `<div class="tt-slide"><div class="tt-empty">${dict[currentLang||'es'].tt_empty}</div></div>`;
+    dots.innerHTML = '';
     avg.textContent = "";
+    document.getElementById('ttPrev').style.display = 'none';
+    document.getElementById('ttNext').style.display = 'none';
     return;
   }
+
+  ttData = data;
+  ttIndex = 0;
+
   const avgVal = (data.reduce((s,t)=>s+t.rating,0)/data.length).toFixed(1);
   avg.textContent = `${STARS.slice(0,Math.round(avgVal))} ${avgVal} (${data.length})`;
-  grid.innerHTML = data.map(t=>`
-    <div class="tt-card">
-      <div class="tt-stars">${STARS.slice(0,t.rating)}${"☆".repeat(5-t.rating)}</div>
-      ${t.comment ? `<div class="tt-comment">${escapeHtml(t.comment)}</div>` : ''}
-      <div class="tt-name">${escapeHtml(t.client_name||'Cliente')}</div>
+
+  track.innerHTML = data.map(t => `
+    <div class="tt-slide">
+      <div class="tt-card">
+        <div class="tt-stars">${STARS.slice(0,t.rating)}${"☆".repeat(5-t.rating)}</div>
+        ${t.comment ? `<div class="tt-comment">"${escapeHtml(t.comment)}"</div>` : ''}
+        <div class="tt-name">${escapeHtml(t.client_name||'Cliente')}</div>
+      </div>
     </div>
   `).join('');
+
+  const showArrows = data.length > 1;
+  document.getElementById('ttPrev').style.display = showArrows ? 'flex' : 'none';
+  document.getElementById('ttNext').style.display = showArrows ? 'flex' : 'none';
+
+  dots.innerHTML = data.map((_, i) => `<button type="button" class="tt-dot" data-i="${i}"></button>`).join('');
+  dots.querySelectorAll('.tt-dot').forEach(d => d.addEventListener('click', () => {
+    goToSlide(parseInt(d.dataset.i));
+    resetAutoplay();
+  }));
+
+  goToSlide(0);
+  if(data.length > 1) startAutoplay();
+
+  const allList = document.getElementById('ttAllList');
+  allList.innerHTML = data.map(t => `
+    <div class="tt-all-item">
+      <div class="tt-all-top">
+        <span class="tt-all-stars">${STARS.slice(0,t.rating)}${"☆".repeat(5-t.rating)}</span>
+        <span class="tt-all-name">${escapeHtml(t.client_name||'Cliente')}</span>
+      </div>
+      ${t.comment ? `<div class="tt-all-comment">${escapeHtml(t.comment)}</div>` : ''}
+    </div>
+  `).join('');
+
+  const seeAllBtn = document.getElementById('ttSeeAllBtn');
+  seeAllBtn.style.display = 'block';
+  updateSeeAllBtnText();
 }
+
+function goToSlide(i){
+  if(!ttData.length) return;
+  ttIndex = (i + ttData.length) % ttData.length;
+  document.getElementById('ttTrack').style.transform = `translateX(-${ttIndex * 100}%)`;
+  document.querySelectorAll('.tt-dot').forEach((d, idx) => d.classList.toggle('active', idx === ttIndex));
+}
+
+function startAutoplay(){
+  clearInterval(ttAutoplayTimer);
+  ttAutoplayTimer = setInterval(() => goToSlide(ttIndex + 1), 6000);
+}
+function resetAutoplay(){
+  if(ttData.length > 1) startAutoplay();
+}
+
+document.getElementById('ttPrev').addEventListener('click', () => { goToSlide(ttIndex - 1); resetAutoplay(); });
+document.getElementById('ttNext').addEventListener('click', () => { goToSlide(ttIndex + 1); resetAutoplay(); });
+
+let ttShowingAll = false;
+document.getElementById('ttSeeAllBtn').addEventListener('click', () => {
+  ttShowingAll = !ttShowingAll;
+  document.getElementById('ttAllList').style.display = ttShowingAll ? 'flex' : 'none';
+  document.getElementById('ttCarousel').style.display = ttShowingAll ? 'none' : 'flex';
+  document.getElementById('ttDots').style.display = ttShowingAll ? 'none' : 'flex';
+  clearInterval(ttAutoplayTimer);
+  if(!ttShowingAll && ttData.length > 1) startAutoplay();
+  updateSeeAllBtnText();
+});
+
+function updateSeeAllBtnText(){
+  const l = dict[currentLang||'es'];
+  const btn = document.getElementById('ttSeeAllBtn');
+  if(!ttData.length) return;
+  btn.textContent = ttShowingAll ? `${l.tt_showless} ←` : `${l.tt_seeall} (${ttData.length}) →`;
+}
+
 function escapeHtml(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
 // ---------- Contact CTA ----------
