@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>QCV · Historial</title>
+<meta property="og:type" content="website" />
+<meta property="og:title" content="CV Vault · Historial · QCV" />
+<meta property="og:description" content="Revisa el estado de cada CV enviado, regenera contraseñas o elimina envíos." />
+<meta property="og:image" content="https://cv-vault.netlify.app/assets/og-image.png" />
+<meta property="og:url" content="https://cv-vault.netlify.app/historial.html" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="CV Vault · Historial · QCV" />
+<meta name="twitter:description" content="Revisa el estado de cada CV enviado, regenera contraseñas o elimina envíos." />
+<meta name="twitter:image" content="https://cv-vault.netlify.app/assets/og-image.png" />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon-512.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A1229; --bg2:#0F1B3D; --surface:#101B3B; --card:#121F45;
+    --line:rgba(255,255,255,.09); --ink:#F4F7FC; --ink-soft:#93A0C2;
+    --grad:linear-gradient(120deg,#1650C9 0%,#22C7F5 100%);
+    --cyan:#22C7F5; --gold:#F5B942; --ok:#33C481; --err:#F16565;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;min-height:100vh;}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 20px 80px;}
+  .brandrow{display:flex;align-items:center;gap:10px;margin-bottom:24px;}
+  .brandrow img{height:28px;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px;}
+  h1{font-family:'Space Grotesk',sans-serif;font-size:30px;font-weight:700;margin:0 0 6px;letter-spacing:-.01em;}
+  .sub{color:var(--ink-soft);font-size:14px;margin-bottom:32px;}
+  input[type=password],input[type=text]{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;background:var(--bg2);color:var(--ink);margin-bottom:12px;}
+  input:focus{outline:2px solid var(--cyan);outline-offset:1px;}
+  button{font-family:'Inter',sans-serif;font-weight:600;font-size:14px;border:none;border-radius:8px;cursor:pointer;transition:all .15s ease;}
+  .btn-primary{width:100%;background:var(--grad);color:#fff;padding:14px;font-size:15px;box-shadow:0 10px 26px rgba(34,199,245,.2);}
+  .btn-primary:hover{filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 12px 32px rgba(34,199,245,.35);}
+  .gate{max-width:340px;margin:100px auto;text-align:center;}
+  .gate img{height:40px;margin-bottom:20px;}
+  .gate .pill-toggle{margin:0 auto 24px;width:fit-content;}
+  .gate .portal-tabs{margin:0 auto 24px;width:fit-content;}
+  .status{font-family:'IBM Plex Mono',monospace;font-size:12.5px;margin-top:10px;min-height:16px;color:var(--err);}
+
+  .pw-wrap{position:relative;}
+  .pw-wrap input{padding-right:44px;}
+  .eye-btn{
+    position:absolute;right:4px;top:4px;bottom:16px;width:36px;background:none;border:none;
+    color:var(--ink-soft);display:flex;align-items:center;justify-content:center;padding:0;
+  }
+  .eye-btn:hover{color:var(--cyan);}
+  .eye-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;}
+
+  .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:14px;}
+  a.brandrow{text-decoration:none;}
+  .portal-tabs{display:flex;gap:2px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:3px;flex-wrap:wrap;}
+  .portal-tabs .tab{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--ink-soft);
+    padding:7px 14px;border-radius:16px;text-decoration:none;transition:all .15s ease;white-space:nowrap;
+  }
+  .portal-tabs .tab:hover{color:var(--ink);}
+  .portal-tabs .tab.active{background:var(--grad);color:#fff;}
+  @media (max-width:680px){
+    .topbar{flex-direction:column;align-items:flex-start;}
+    .portal-tabs{width:100%;justify-content:space-between;}
+    .topctrls{width:100%;justify-content:space-between;}
+  }
+  .pill-toggle{display:flex;border:1px solid var(--line);border-radius:20px;padding:3px;background:var(--surface);}
+  .pill-toggle button{border:none;background:none;color:var(--ink-soft);font-size:12px;font-weight:600;padding:5px 11px;border-radius:16px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:color .15s ease;}
+  .pill-toggle button.active{background:var(--grad);color:#fff;}
+  .pill-toggle button:hover:not(.active){color:var(--ink);}
+  .topctrls{display:flex;align-items:center;gap:10px;}
+  .btn-logout{background:var(--surface);border:1px solid var(--line);color:var(--ink-soft);padding:8px 14px;font-size:12.5px;}
+  .btn-logout:hover{color:var(--err);border-color:var(--err);}
+
+  .req-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin-bottom:16px;}
+  .req-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+  .req-name{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;}
+  .req-name small{display:block;font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:400;color:var(--ink-soft);margin-top:2px;}
+  .req-date{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft);white-space:nowrap;}
+  .req-row{font-size:13.5px;color:var(--ink-soft);margin-bottom:4px;}
+  .req-row b{color:var(--ink);font-weight:600;}
+  .badge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px;margin-left:6px;}
+  .badge.active{background:rgba(51,196,129,.15);color:var(--ok);}
+  .badge.expired{background:rgba(241,101,101,.15);color:var(--err);}
+  .badge.yes{background:rgba(34,199,245,.15);color:var(--cyan);}
+  .badge.no{background:var(--surface);color:var(--ink-soft);}
+  .req-actions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;}
+  .btn-copy{background:var(--surface);border:1px solid var(--cyan);color:var(--cyan);padding:10px 16px;font-size:13px;}
+  .btn-copy:hover{background:var(--bg2);transform:translateY(-1px);}
+  .btn-copy.copied{background:var(--ok);border-color:var(--ok);color:#fff;}
+  .btn-reset{background:var(--surface);border:1px solid var(--gold);color:var(--gold);padding:10px 16px;font-size:13px;}
+  .btn-reset:hover{background:var(--bg2);transform:translateY(-1px);}
+  .btn-delete{background:var(--surface);border:1px solid var(--err);color:var(--err);padding:10px 16px;font-size:13px;}
+  .btn-delete:hover{background:var(--bg2);transform:translateY(-1px);}
+  .btn-delete.confirm{background:var(--err);color:#fff;}
+  .reset-box{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);display:none;}
+  .reset-box.show{display:block;}
+  .reset-row{display:flex;gap:8px;}
+  .reset-row input{margin-bottom:0;flex:1;}
+  .reset-row button{white-space:nowrap;padding:11px 14px;background:var(--grad);color:#fff;font-size:13px;}
+  .reset-msg{font-family:'IBM Plex Mono',monospace;font-size:12px;margin-top:8px;min-height:14px;}
+  .reset-msg.ok{color:var(--ok);}
+  .reset-msg.err{color:var(--err);}
+  .empty{text-align:center;padding:60px 20px;color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;font-size:13px;}
+  .hint{font-size:12px;color:var(--ink-soft);margin-top:-4px;margin-bottom:10px;line-height:1.5;}
+</style>
+</head>
+<body>
+
+<div id="gate" class="wrap gate">
+  <img src="assets/logo.png" alt="QCV" />
+  <div class="portal-tabs">
+    <a href="https://qcv-landing.netlify.app/" class="tab" data-i18n="tab_landing">Landing</a>
+    <a href="admin.html" class="tab" data-i18n="tab_panel">Panel</a>
+    <a href="solicitudes.html" class="tab" data-i18n="tab_requests">Solicitudes</a>
+    <a href="historial.html" class="tab active" data-i18n="tab_history">Historial</a>
+    <a href="https://qcv-landing.netlify.app/formulario.html" class="tab" data-i18n="tab_form">Formulario</a>
+  </div>
+  <div class="pill-toggle" id="langToggleGate">
+    <button data-lang="es">ES</button>
+    <button data-lang="en">EN</button>
+  </div>
+  <div class="eyebrow" data-i18n="gate_eyebrow">Acceso privado</div>
+  <h1 style="font-size:22px;" data-i18n="gate_title">Código de acceso</h1>
+  <div class="pw-wrap">
+    <input type="password" id="gateCode" data-i18n-ph="gate_ph" placeholder="••••••" />
+    <button type="button" class="eye-btn" id="eyeBtn" onclick="toggleEye()" aria-label="Mostrar/ocultar">
+      <svg id="eyeIcon" viewBox="0 0 24 24"><path d="M17.94 17.94A10.94 10.94 0 0112 19c-7 0-11-7-11-7a18.6 18.6 0 015.06-5.94M9.9 4.24A10.94 10.94 0 0112 4c7 0 11 7 11 7a18.6 18.6 0 01-2.16 3.19M14.12 14.12a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+    </button>
+  </div>
+  <button class="btn-primary" onclick="loadLinks()" data-i18n="gate_enter">Entrar</button>
+  <div class="status" id="gateStatus"></div>
+</div>
+
+<div class="wrap" id="app" style="display:none;">
+  <div class="topbar">
+    <a href="admin.html" class="brandrow" style="margin-bottom:0;"><img src="assets/logo.png" alt="QCV" /></a>
+    <div class="portal-tabs">
+      <a href="https://qcv-landing.netlify.app/" class="tab" data-i18n="tab_landing">Landing</a>
+      <a href="admin.html" class="tab" data-i18n="tab_panel">Panel</a>
+      <a href="solicitudes.html" class="tab" data-i18n="tab_requests">Solicitudes</a>
+      <a href="historial.html" class="tab active" data-i18n="tab_history">Historial</a>
+      <a href="https://qcv-landing.netlify.app/formulario.html" class="tab" data-i18n="tab_form">Formulario</a>
+    </div>
+    <div class="topctrls">
+      <div class="pill-toggle" id="langToggleApp">
+        <button data-lang="es">ES</button>
+        <button data-lang="en">EN</button>
+      </div>
+      <button class="btn-logout" onclick="logout()" data-i18n="logout">Cerrar sesión</button>
+    </div>
+  </div>
+  <div class="eyebrow" data-i18n="eyebrow">CV Vault · Historial</div>
+  <h1 data-i18n="title">CVs enviados</h1>
+  <div class="sub" data-i18n="subtitle">Cada tarjeta es un CV que subiste. Las contraseñas nunca se guardan en texto plano, así que no se pueden mostrar de nuevo — si la perdiste, genera una nueva ahí mismo.</div>
+  <div id="list"></div>
+</div>
+
+<script>
+// ============================================================
+// CONFIGURA ESTOS VALORES ANTES DE DESPLEGAR
+// ============================================================
+const LIST_URL = "https://rwugrzexjmvcxgzznqjj.functions.supabase.co/list-links";
+const RESET_URL = "https://rwugrzexjmvcxgzznqjj.functions.supabase.co/reset-link-password";
+const DELETE_URL = "https://rwugrzexjmvcxgzznqjj.functions.supabase.co/delete-link";
+const SITE_URL = "https://cv-vault.netlify.app"; // dominio donde vive view.html
+// ============================================================
+
+// ---------- i18n ----------
+const dict = {
+  es: {
+    logout:"Cerrar sesión", eyebrow:"CV Vault · Historial", title:"CVs enviados",
+    subtitle:"Cada tarjeta es un CV que subiste. Las contraseñas nunca se guardan en texto plano, así que no se pueden mostrar de nuevo — si la perdiste, genera una nueva ahí mismo.",
+    gate_eyebrow:"Acceso privado", gate_title:"Código de acceso",
+    gate_ph:"••••••", gate_enter:"Entrar",
+    tab_landing:"Landing", tab_panel:"Panel", tab_requests:"Solicitudes", tab_history:"Historial", tab_form:"Formulario",
+    err_wrong:"Código incorrecto", err_load:"Error al cargar", err_conn:"Error de conexión",
+    loading:"Cargando...", empty:"Aún no has subido ningún CV.",
+    lbl_created:"Creado:", lbl_status:"Estado:", lbl_downloaded:"Descargado:",
+    badge_active:"Activo", badge_expired:"Expirado", badge_yes:"Sí", badge_no:"No",
+    btn_copy:"📋 Copiar enlace", btn_copied:"✓ Copiado",
+    btn_reset:"🔑 Nueva contraseña", reset_hint:"Genera una contraseña nueva para este mismo enlace (la anterior queda inválida).",
+    reset_gen:"Generar", reset_save:"Guardar y copiar",
+    reset_ok:"¡Listo! Nueva contraseña copiada al portapapeles.", reset_err:"No se pudo actualizar. Intenta de nuevo.",
+    reset_empty:"Genera o escribe una contraseña primero.",
+    btn_delete:"🗑 Eliminar", btn_delete_confirm:"¿Seguro? Clic para confirmar", btn_deleting:"Eliminando...", btn_delete_err:"Error, intenta de nuevo",
+  },
+  en: {
+    logout:"Log out", eyebrow:"CV Vault · History", title:"Sent resumes",
+    subtitle:"Each card is a resume you uploaded. Passwords are never stored as plain text, so they can't be shown again — if you lost it, generate a new one right here.",
+    gate_eyebrow:"Private access", gate_title:"Access code",
+    gate_ph:"••••••", gate_enter:"Enter",
+    tab_landing:"Landing", tab_panel:"Panel", tab_requests:"Requests", tab_history:"History", tab_form:"Form",
+    err_wrong:"Incorrect code", err_load:"Error loading data", err_conn:"Connection error",
+    loading:"Loading...", empty:"You haven't uploaded any resumes yet.",
+    lbl_created:"Created:", lbl_status:"Status:", lbl_downloaded:"Downloaded:",
+    badge_active:"Active", badge_expired:"Expired", badge_yes:"Yes", badge_no:"No",
+    btn_copy:"📋 Copy link", btn_copied:"✓ Copied",
+    btn_reset:"🔑 New password", reset_hint:"Generate a fresh password for this same link (the old one becomes invalid).",
+    reset_gen:"Generate", reset_save:"Save & copy",
+    reset_ok:"Done! New password copied to clipboard.", reset_err:"Couldn't update. Please try again.",
+    reset_empty:"Generate or type a password first.",
+    btn_delete:"🗑 Delete", btn_delete_confirm:"Sure? Click to confirm", btn_deleting:"Deleting...", btn_delete_err:"Error, try again",
+  }
+};
+
+let currentLang = localStorage.getItem('qcv_admin_lang') || 'es';
+
+function applyLang(lang){
+  currentLang = lang;
+  localStorage.setItem('qcv_admin_lang', lang);
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[lang][key] !== undefined) el.textContent = dict[lang][key];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-ph');
+    if(dict[lang][key] !== undefined) el.placeholder = dict[lang][key];
+  });
+  document.querySelectorAll('.pill-toggle button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+  if(window._links) renderList(window._links);
+}
+document.querySelectorAll('.pill-toggle button').forEach(b=>{
+  b.addEventListener('click', ()=> applyLang(b.dataset.lang));
+});
+applyLang(currentLang);
+
+function toggleEye(){
+  const input = document.getElementById('gateCode');
+  const icon = document.getElementById('eyeIcon');
+  const willShow = input.type === 'password';
+  input.type = willShow ? 'text' : 'password';
+  icon.innerHTML = willShow
+    ? '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>'
+    : '<path d="M17.94 17.94A10.94 10.94 0 0112 19c-7 0-11-7-11-7a18.6 18.6 0 015.06-5.94M9.9 4.24A10.94 10.94 0 0112 4c7 0 11 7 11 7a18.6 18.6 0 01-2.16 3.19M14.12 14.12a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+}
+
+let sessionCode = null;
+
+function logout(){
+  document.getElementById('app').style.display='none';
+  document.getElementById('gate').style.display='block';
+  document.getElementById('gateCode').value='';
+  document.getElementById('gateStatus').textContent='';
+  window._links = null;
+  sessionCode = null;
+  localStorage.removeItem('qcv_cvvault_code');
+}
+
+function fmtDate(iso){
+  const d = new Date(iso);
+  return d.toLocaleDateString('es-DO', {day:'2-digit', month:'short', year:'numeric'}) +
+         ' · ' + d.toLocaleTimeString('es-DO', {hour:'2-digit', minute:'2-digit'});
+}
+
+async function loadLinks(codeOverride){
+  const code = codeOverride || document.getElementById('gateCode').value;
+  const status = document.getElementById('gateStatus');
+  status.textContent = dict[currentLang].loading;
+
+  try{
+    const res = await fetch(LIST_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({code})
+    });
+    const json = await res.json();
+
+    if(!res.ok){
+      status.textContent = json.error === 'unauthorized' ? dict[currentLang].err_wrong : dict[currentLang].err_load;
+      localStorage.removeItem('qcv_cvvault_code');
+      return;
+    }
+
+    localStorage.setItem('qcv_cvvault_code', code);
+    sessionCode = code;
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+
+    window._links = json.data || [];
+    renderList(window._links);
+  }catch(err){
+    status.textContent = dict[currentLang].err_conn;
+    console.error(err);
+  }
+}
+
+// Si ya iniciaste sesión antes en cualquiera de los portales de CV Vault,
+// no vuelve a pedir el código al recargar — solo el botón "Cerrar sesión" sale.
+const _savedCode = localStorage.getItem('qcv_cvvault_code');
+if(_savedCode) loadLinks(_savedCode);
+
+function renderList(data){
+  const l = dict[currentLang];
+  const list = document.getElementById('list');
+  if(!data || data.length === 0){
+    list.innerHTML = `<div class="empty">${l.empty}</div>`;
+    return;
+  }
+
+  list.innerHTML = data.map((r, i) => {
+    const expired = new Date(r.expires_at).getTime() < Date.now();
+    const link = `${SITE_URL}/view.html?id=${r.id}`;
+    return `
+    <div class="req-card">
+      <div class="req-top">
+        <div class="req-name">${escapeHtml(r.client_name || 'Cliente')}<small>${escapeHtml(r.filename)}</small></div>
+        <div class="req-date">${fmtDate(r.created_at)}</div>
+      </div>
+      <div class="req-row"><b>${l.lbl_status}</b> <span class="badge ${expired?'expired':'active'}">${expired?l.badge_expired:l.badge_active}</span></div>
+      <div class="req-row"><b>${l.lbl_downloaded}</b> <span class="badge ${r.downloaded_at?'yes':'no'}">${r.downloaded_at?l.badge_yes:l.badge_no}</span></div>
+      <div class="req-actions">
+        <button class="btn-copy" id="copyBtn${i}" onclick="copyLink('${link}', this)">${l.btn_copy}</button>
+        <button class="btn-reset" onclick="toggleReset(${i})">${l.btn_reset}</button>
+        <button class="btn-delete" id="delBtn${i}" onclick="confirmDelete('${r.id}', ${i}, this)">${l.btn_delete}</button>
+      </div>
+      <div class="reset-box" id="resetBox${i}">
+        <div class="hint">${l.reset_hint}</div>
+        <div class="reset-row">
+          <input type="text" id="resetPw${i}" placeholder="Genérica o propia" />
+          <button type="button" onclick="genResetPassword(${i})">${l.reset_gen}</button>
+        </div>
+        <button type="button" class="btn-primary" style="margin-top:8px;" onclick="saveResetPassword('${r.id}', ${i})">${l.reset_save}</button>
+        <div class="reset-msg" id="resetMsg${i}"></div>
+      </div>
+    </div>
+  `; }).join('');
+}
+
+function toggleReset(i){
+  document.getElementById(`resetBox${i}`).classList.toggle('show');
+}
+
+async function confirmDelete(id, i, btn){
+  const l = dict[currentLang];
+  if(!btn.classList.contains('confirm')){
+    btn.textContent = l.btn_delete_confirm;
+    btn.classList.add('confirm');
+    setTimeout(()=>{
+      if(btn.classList.contains('confirm')){
+        btn.textContent = l.btn_delete;
+        btn.classList.remove('confirm');
+      }
+    }, 4000);
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = l.btn_deleting;
+
+  try{
+    const res = await fetch(DELETE_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({code: sessionCode, id})
+    });
+    const json = await res.json();
+    if(!res.ok) throw new Error(json.error || 'error');
+
+    window._links = window._links.filter(r => r.id !== id);
+    renderList(window._links);
+  }catch(err){
+    btn.disabled = false;
+    btn.textContent = l.btn_delete_err;
+    console.error(err);
+    setTimeout(()=>{ btn.textContent = l.btn_delete; btn.classList.remove('confirm'); }, 2200);
+  }
+}
+
+function genResetPassword(i){
+  const words = ["luna","rio","sol","cielo","mar","piedra","flor","viento","valle","estrella"];
+  const w = words[Math.floor(Math.random()*words.length)];
+  const n = Math.floor(1000 + Math.random()*9000);
+  document.getElementById(`resetPw${i}`).value = w + n;
+}
+
+async function saveResetPassword(id, i){
+  const l = dict[currentLang];
+  const pw = document.getElementById(`resetPw${i}`).value.trim();
+  const msg = document.getElementById(`resetMsg${i}`);
+  if(!pw){ msg.textContent = l.reset_empty; msg.className = 'reset-msg err'; return; }
+
+  try{
+    const res = await fetch(RESET_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({code: sessionCode, id, newPassword: pw})
+    });
+    const json = await res.json();
+    if(!res.ok) throw new Error(json.error || 'error');
+
+    navigator.clipboard.writeText(pw);
+    msg.textContent = l.reset_ok;
+    msg.className = 'reset-msg ok';
+  }catch(err){
+    msg.textContent = l.reset_err;
+    msg.className = 'reset-msg err';
+    console.error(err);
+  }
+}
+
+function copyLink(link, btn){
+  navigator.clipboard.writeText(link);
+  const original = btn.textContent;
+  btn.textContent = dict[currentLang].btn_copied;
+  btn.classList.add('copied');
+  setTimeout(()=>{ btn.textContent = original; btn.classList.remove('copied'); }, 1800);
+}
+
+function escapeHtml(s){
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+document.getElementById('gateCode').addEventListener('keydown', e => {
+  if(e.key === 'Enter') loadLinks();
+});
+</script>
+</body>
+</html>
