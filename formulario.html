@@ -20,6 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 :root{
   --bg:#0A1229; --bg2:#0F1B3D; --surface:#101B3B;
@@ -273,6 +274,26 @@ input:focus,textarea:focus{outline:2px solid var(--cyan);outline-offset:1px;}
 .submit-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:8px;}
 .form-msg{font-family:'IBM Plex Mono',monospace;font-size:12.5px;}
 .form-msg.err{color:var(--err);} .form-msg.ok{color:var(--ok);}
+
+/* ---------- CV upload / autofill ---------- */
+.upload-box{
+  border:2px dashed var(--line);border-radius:14px;padding:22px;text-align:center;
+  cursor:pointer;transition:all .15s ease;background:var(--surface);margin-bottom:26px;
+}
+.upload-box:hover,.upload-box.dragover{border-color:var(--cyan);background:rgba(34,199,245,.06);}
+.upload-box svg{width:26px;height:26px;stroke:var(--cyan);fill:none;stroke-width:2;margin-bottom:8px;}
+.upload-box .up-title{font-weight:600;font-size:14.5px;margin-bottom:4px;}
+.upload-box .up-hint{font-size:12.5px;color:var(--ink-dim);}
+.upload-box .up-file{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--cyan);margin-top:8px;word-break:break-all;}
+.upload-status{font-family:'IBM Plex Mono',monospace;font-size:12.5px;margin-top:10px;min-height:16px;}
+.upload-status.err{color:var(--err);} .upload-status.ok{color:var(--ok);}
+.autofill-banner{
+  display:none;align-items:flex-start;gap:10px;background:rgba(34,199,245,.08);
+  border:1px solid rgba(34,199,245,.35);border-radius:12px;padding:14px 16px;margin-bottom:22px;
+  font-size:13px;line-height:1.5;color:var(--ink);
+}
+.autofill-banner.show{display:flex;}
+.autofill-banner svg{width:18px;height:18px;stroke:var(--cyan);fill:none;stroke-width:2;flex-shrink:0;margin-top:1px;}
 @media (max-width:700px){.f-row{grid-template-columns:1fr;} .form-shell{padding:24px;}}
 
 /* ---------- Responsive ---------- */
@@ -345,6 +366,20 @@ footer{border-top:1px solid var(--line);padding:44px 0;}
       <span class="eyebrow" data-i18n="form_eyebrow">Empecemos</span>
       <h2 data-i18n="form_title">Cuéntame sobre ti</h2>
       <p data-i18n="form_sub">Llena este formulario y te contacto por WhatsApp para coordinar el pago y los detalles.</p>
+    </div>
+
+    <div class="upload-box" id="uploadBox">
+      <svg viewBox="0 0 24 24"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/></svg>
+      <div class="up-title" data-i18n="up_title">¿Ya tienes un CV? Súbelo y te lleno el formulario</div>
+      <div class="up-hint" data-i18n="up_hint">Solo PDF. Extraigo tus datos automáticamente — revisa y corrige antes de enviar.</div>
+      <div class="up-file" id="upFileName"></div>
+      <input type="file" id="cvUploadInput" accept="application/pdf" style="display:none" />
+    </div>
+    <div class="upload-status" id="uploadStatus"></div>
+
+    <div class="autofill-banner" id="autofillBanner">
+      <svg viewBox="0 0 24 24"><path d="M12 22c5.5 0 10-4.5 10-10S17.5 2 12 2 2 6.5 2 12s4.5 10 10 10z"/><path d="M12 8v5M12 16h.01"/></svg>
+      <span data-i18n="up_banner">Rellené el formulario con lo que encontré en tu CV. Por favor revisa cada campo — sobre todo fechas y nombres — y corrige lo que haga falta antes de enviar.</span>
     </div>
 
     <form class="form-shell" id="cvForm">
@@ -454,6 +489,15 @@ const dict = {
     tt_empty:"Aún no hay testimonios — sé el primero.",
     form_eyebrow:"Último paso", form_title:"Completa tu información",
     form_sub:"Llena estos datos para que pueda elaborar tu currículum. Revisa cada campo antes de enviarlo.",
+    up_title:"¿Ya tienes un CV? Súbelo y te lleno el formulario",
+    up_hint:"Solo PDF. Extraigo tus datos automáticamente — revisa y corrige antes de enviar.",
+    up_banner:"Rellené el formulario con lo que encontré en tu CV. Por favor revisa cada campo — sobre todo fechas y nombres — y corrige lo que haga falta antes de enviar.",
+    up_reading:"Leyendo tu PDF...",
+    up_done:"Listo — revisa los campos rellenados abajo.",
+    up_done_partial:"Encontré algunos datos, pero no todos. Completa lo que falte abajo.",
+    up_err_not_pdf:"Ese archivo no es un PDF.",
+    up_err_read:"No pude leer ese PDF. Completa el formulario manualmente.",
+    up_err_empty:"No encontré texto en ese PDF (¿es una imagen escaneada?). Completa el formulario manualmente.",
     f_name:"Nombre completo", f_email:"Correo electrónico", f_phone:"Número de contacto",
     f_exp_title:"Experiencia laboral",
     f_exp_hint:"Si trabajaste en un call center, pon el nombre de la campaña, no el de la empresa. Si no recuerdas el mes o año exacto, pon uno aproximado.",
@@ -505,6 +549,15 @@ const dict = {
     tt_empty:"No testimonials yet — be the first.",
     form_eyebrow:"Last step", form_title:"Complete your information",
     form_sub:"Fill in these details so I can build your resume. Please double-check each field before submitting.",
+    up_title:"Already have a resume? Upload it and I'll fill the form for you",
+    up_hint:"PDF only. I extract your data automatically — review and correct before submitting.",
+    up_banner:"I filled the form with what I found in your resume. Please review every field — especially dates and names — and fix anything before submitting.",
+    up_reading:"Reading your PDF...",
+    up_done:"Done — review the filled fields below.",
+    up_done_partial:"I found some data, but not all of it. Please fill in what's missing below.",
+    up_err_not_pdf:"That file isn't a PDF.",
+    up_err_read:"I couldn't read that PDF. Please fill the form manually.",
+    up_err_empty:"I didn't find any text in that PDF (is it a scanned image?). Please fill the form manually.",
     f_name:"Full name", f_email:"Email address", f_phone:"Contact number",
     f_exp_title:"Work experience",
     f_exp_hint:"If you worked at a call center, put the campaign name, not the company name. If you don't remember the exact month or year, put an approximate one.",
@@ -579,6 +632,233 @@ document.getElementById('themeToggle').addEventListener('click', ()=>{
   applyTheme(cur === 'dark' ? 'light' : 'dark');
 });
 applyTheme(localStorage.getItem('qcv_theme') || 'dark');
+
+// ---------- CV upload → autofill ----------
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+const uploadBox = document.getElementById('uploadBox');
+const cvUploadInput = document.getElementById('cvUploadInput');
+const uploadStatus = document.getElementById('uploadStatus');
+const upFileName = document.getElementById('upFileName');
+const autofillBanner = document.getElementById('autofillBanner');
+
+function setUploadStatus(text, cls){
+  uploadStatus.textContent = text || '';
+  uploadStatus.className = 'upload-status' + (cls ? ' ' + cls : '');
+}
+
+uploadBox.addEventListener('click', ()=> cvUploadInput.click());
+uploadBox.addEventListener('dragenter', (e)=>{ e.preventDefault(); uploadBox.classList.add('dragover'); });
+uploadBox.addEventListener('dragover', (e)=>{ e.preventDefault(); uploadBox.classList.add('dragover'); });
+uploadBox.addEventListener('dragleave', ()=> uploadBox.classList.remove('dragover'));
+uploadBox.addEventListener('drop', (e)=>{
+  e.preventDefault(); uploadBox.classList.remove('dragover');
+  if(e.dataTransfer.files && e.dataTransfer.files[0]) handleCvFile(e.dataTransfer.files[0]);
+});
+cvUploadInput.addEventListener('change', (e)=>{
+  if(e.target.files && e.target.files[0]) handleCvFile(e.target.files[0]);
+});
+document.addEventListener('paste', (e)=>{
+  if(!e.clipboardData || !e.clipboardData.items) return;
+  for(const item of e.clipboardData.items){
+    if(item.kind === 'file'){
+      const f = item.getAsFile();
+      if(f && (f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf'))){
+        handleCvFile(f);
+        break;
+      }
+    }
+  }
+});
+
+async function handleCvFile(file){
+  const l = dict[currentLang || 'es'];
+  if(file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')){
+    setUploadStatus(l.up_err_not_pdf, 'err');
+    return;
+  }
+  upFileName.textContent = file.name;
+  setUploadStatus(l.up_reading);
+  try{
+    const buf = await file.arrayBuffer();
+    const text = await extractPdfText(buf);
+    if(!text || !text.trim()){
+      setUploadStatus(l.up_err_empty, 'err');
+      return;
+    }
+    const parsed = parseCvText(text);
+    const filledCount = applyParsedData(parsed);
+    autofillBanner.classList.add('show');
+    setUploadStatus(filledCount >= 4 ? l.up_done : l.up_done_partial, 'ok');
+  }catch(err){
+    console.error(err);
+    setUploadStatus(l.up_err_read, 'err');
+  }
+}
+
+async function extractPdfText(buf){
+  const pdf = await pdfjsLib.getDocument({data: buf}).promise;
+  let fullText = '';
+  const items = []; // {str, fontSize, page, y}
+  const maxPages = Math.min(pdf.numPages, 3); // el resto del CV rara vez importa para estos campos
+  for(let p=1; p<=maxPages; p++){
+    const page = await pdf.getPage(p);
+    const content = await page.getTextContent();
+    let lastY = null;
+    let lineBuf = [];
+    for(const item of content.items){
+      const fontSize = Math.abs(item.transform[0]) || Math.abs(item.transform[3]) || 0;
+      items.push({str:item.str, fontSize, page:p, y:item.transform[5]});
+      if(lastY !== null && Math.abs(item.transform[5] - lastY) > 2){
+        fullText += lineBuf.join(' ').trim() + '\n';
+        lineBuf = [];
+      }
+      lineBuf.push(item.str);
+      lastY = item.transform[5];
+    }
+    fullText += lineBuf.join(' ').trim() + '\n';
+  }
+  extractPdfText._items = items; // guardado para el heurístico de nombre por tamaño de fuente
+  return fullText;
+}
+
+function parseCvText(text){
+  const rawLines = text.split(/\n/).map(l=>l.trim());
+  const lines = rawLines.filter(l=>l.length>0);
+  const result = { name:'', email:'', phone:'', education:'', certifications:'', experience:[] };
+
+  // ---- Email ----
+  const emailMatch = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+  if(emailMatch) result.email = emailMatch[0];
+
+  // ---- Phone ----
+  const phoneMatch = text.match(/(\+?\d{1,3}[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}\b/);
+  if(phoneMatch) result.phone = phoneMatch[0].trim();
+
+  // ---- Name: primero por tamaño de fuente (texto más grande cerca del tope), luego por posición ----
+  const items = extractPdfText._items || [];
+  const nameLike = (s)=> /^[A-Za-zÀ-ÿ'’.\s]{4,50}$/.test(s) && s.trim().split(/\s+/).length >= 2 && s.trim().split(/\s+/).length <= 5;
+  const page1Items = items.filter(it=> it.page === 1 && it.str && it.str.trim());
+  if(page1Items.length){
+    const maxFont = Math.max(...page1Items.map(it=>it.fontSize));
+    const bigCandidates = page1Items.filter(it=> it.fontSize >= maxFont - 0.5 && nameLike(it.str));
+    if(bigCandidates.length) result.name = bigCandidates[0].str.trim();
+  }
+  if(!result.name){
+    const sectionWords = /^(email|phone|tel[eé]fono|contact|contacto|education|educaci[oó]n|certificat|certificaci|experience|experiencia|profile|perfil|summary|resumen|objective|objetivo|skills|habilidades|work|employment)/i;
+    for(const line of lines.slice(0,10)){
+      if(sectionWords.test(line)) continue;
+      if(line.includes('@')) continue;
+      if(/\d{3,}/.test(line)) continue;
+      const words = line.replace(/^[•\-\*]+\s*/,'').trim();
+      if(nameLike(words)){ result.name = words; break; }
+    }
+  }
+
+  // ---- Secciones: Educación / Certificaciones / Experiencia ----
+  const headingDefs = [
+    {key:'experience', re:/^(professional\s+)?(work\s+)?experience\b|^employment\s+history\b|^experiencia\s+(laboral|profesional)?\b|^historial\s+laboral\b/i},
+    {key:'education', re:/^education\b|^academic\s+background\b|^educaci[oó]n\b|^formaci[oó]n\s+acad[eé]mica\b/i},
+    {key:'certifications', re:/^certificat(ions?|es)?\b|^certificaci[oó]n(es)?\b|^cursos\b/i},
+    {key:'boundary', re:/^(skills|summary|objective|profile|languages|references|projects|habilidades|resumen|objetivo|perfil|idiomas|referencias|proyectos)\b/i},
+  ];
+  const headings = [];
+  lines.forEach((line, idx)=>{
+    for(const h of headingDefs){
+      if(h.re.test(line)){ headings.push({key:h.key, idx}); break; }
+    }
+  });
+  function sectionLines(key){
+    const h = headings.find(x=>x.key===key);
+    if(!h) return [];
+    const nextIdx = headings.filter(x=>x.idx > h.idx).map(x=>x.idx).sort((a,b)=>a-b)[0];
+    const end = nextIdx !== undefined ? nextIdx : lines.length;
+    return lines.slice(h.idx+1, end);
+  }
+
+  const eduLines = sectionLines('education');
+  if(eduLines.length) result.education = eduLines.slice(0,3).join('; ');
+
+  const certLines = sectionLines('certifications');
+  if(certLines.length) result.certifications = certLines.slice(0,3).join('; ');
+
+  const expLines = sectionLines('experience');
+  result.experience = parseExperienceEntries(expLines);
+
+  return result;
+}
+
+function parseExperienceEntries(lines){
+  const bulletRe = /^[•\-\*•●·▪]\s*/;
+  const monthWord = '(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|ene|abr|ago|dic)[a-z]*\\.?';
+  const dateRe = new RegExp(
+    `(${monthWord}\\s*\\d{4}|\\d{4})\\s*(?:[-–—]|to|al|hasta)\\s*(present|actual|actualidad|current|${monthWord}\\s*\\d{4}|\\d{4})`,
+    'i'
+  );
+
+  const entries = [];
+  let pendingHeader = [];
+
+  function flush(dates){
+    const headerText = pendingHeader.join(' ').replace(/[|,]/g,' — ').replace(/\s{2,}/g,' ').trim();
+    pendingHeader = [];
+    if(!headerText && !dates) return;
+    let place = headerText, position = '';
+    const sepMatch = headerText.match(/^(.*?)\s+[—–]\s+(.+)$/);
+    if(sepMatch){ place = sepMatch[1].trim(); position = sepMatch[2].trim(); }
+    entries.push({
+      place,
+      position,
+      start_year: dates ? dates.start : '',
+      end_year: dates ? dates.end : '',
+    });
+  }
+
+  for(const rawLine of lines){
+    if(bulletRe.test(rawLine)) continue; // descripciones de la tarea: no se incluyen
+    const dm = rawLine.match(dateRe);
+    if(dm){
+      const remainder = rawLine.replace(dm[0], '').replace(/[()|]/g,' ').trim();
+      if(remainder) pendingHeader.push(remainder);
+      flush({start: dm[1].trim(), end: dm[2].trim()});
+    } else if(rawLine.length > 1){
+      pendingHeader.push(rawLine);
+    }
+  }
+  if(pendingHeader.length) flush(null);
+
+  return entries.filter(e => e.place || e.position || e.start_year || e.end_year);
+}
+
+function applyParsedData(parsed){
+  let filled = 0;
+  const nameEl = document.getElementById('fullName');
+  const emailEl = document.getElementById('email');
+  const phoneEl = document.getElementById('phone');
+  const eduEl = document.getElementById('education');
+  const certEl = document.getElementById('certifications');
+
+  if(parsed.name && !nameEl.value){ nameEl.value = parsed.name; filled++; }
+  if(parsed.email && !emailEl.value){ emailEl.value = parsed.email; filled++; }
+  if(parsed.phone && !phoneEl.value){ phoneEl.value = parsed.phone; filled++; }
+  if(parsed.education){ eduEl.value = parsed.education; filled++; }
+  if(parsed.certifications){ certEl.value = parsed.certifications; filled++; }
+
+  if(parsed.experience && parsed.experience.length){
+    document.getElementById('expList').innerHTML = '';
+    expCount = 0;
+    parsed.experience.forEach(exp=>{
+      addExpRow();
+      const block = document.querySelector(`.exp-block[data-id="${expCount}"]`);
+      block.querySelector('.exp-place').value = exp.place || '';
+      block.querySelector('.exp-position').value = exp.position || '';
+      block.querySelector('.exp-start').value = exp.start_year || '';
+      block.querySelector('.exp-end').value = exp.end_year || '';
+    });
+    filled++;
+  }
+  return filled;
+}
 
 // ---------- Experience rows ----------
 let expCount = 0;
