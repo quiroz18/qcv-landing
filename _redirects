@@ -1,0 +1,2 @@
+# Algunas extensiones y herramientas piden /logo.png en la raiz; lo servimos desde assets para evitar el 404 en consola.
+/logo.png  /assets/logo.png  200
