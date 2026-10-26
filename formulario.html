@@ -19,8 +19,8 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="/js/vendor/supabase.js"></script>
+<script src="/js/vendor/pdf.min.js"></script>
 <style>
 :root{
   --bg:#0A1229; --bg2:#0F1B3D; --surface:#101B3B;
@@ -634,7 +634,7 @@ document.getElementById('themeToggle').addEventListener('click', ()=>{
 applyTheme(localStorage.getItem('qcv_theme') || 'dark');
 
 // ---------- CV upload → autofill ----------
-pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+pdfjsLib.GlobalWorkerOptions.workerSrc = "/js/vendor/pdf.worker.min.js";
 
 const uploadBox = document.getElementById('uploadBox');
 const cvUploadInput = document.getElementById('cvUploadInput');
@@ -697,7 +697,7 @@ async function handleCvFile(file){
 }
 
 async function extractPdfText(buf){
-  const pdf = await pdfjsLib.getDocument({data: buf}).promise;
+  const pdf = await pdfjsLib.getDocument({data: buf, isEvalSupported: false}).promise;
   let fullText = '';
   const items = []; // {str, fontSize, page, y}
   const maxPages = Math.min(pdf.numPages, 3); // el resto del CV rara vez importa para estos campos
@@ -937,12 +937,12 @@ document.getElementById('cvForm').addEventListener('submit', async (e)=>{
   msg.textContent = l.form_sending; msg.className = 'form-msg';
 
   const payload = {
-    full_name: document.getElementById('fullName').value.trim(),
-    email: document.getElementById('email').value.trim(),
-    phone: document.getElementById('phone').value.trim(),
-    experience: experiences,
-    education: document.getElementById('education').value.trim(),
-    certifications: document.getElementById('certifications').value.trim(),
+    full_name: document.getElementById('fullName').value.trim().slice(0, 150),
+    email: document.getElementById('email').value.trim().slice(0, 200),
+    phone: document.getElementById('phone').value.trim().slice(0, 50),
+    experience: experiences.slice(0, 20).map(x => ({place: x.place.slice(0, 200), position: x.position.slice(0, 200), start_year: x.start_year.slice(0, 50), end_year: x.end_year.slice(0, 50)})),
+    education: document.getElementById('education').value.trim().slice(0, 3000),
+    certifications: document.getElementById('certifications').value.trim().slice(0, 3000),
     language: currentLang || 'es',
   };
 
