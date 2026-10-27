@@ -1,2 +1,5 @@
 # Algunas extensiones y herramientas piden /logo.png en la raiz; lo servimos desde assets para evitar el 404 en consola.
 /logo.png  /assets/logo.png  200
+# Lo que se sube al repo se publica en la web: el esquema y la guia interna no deben poder leerse.
+/schema.sql  /404.html  404!
+/README.md  /404.html  404!
